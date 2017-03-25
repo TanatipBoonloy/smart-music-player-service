@@ -11,6 +11,12 @@ import java.util.List;
 public interface ControllerService {
     List<ArtistResponse> getAllArtistName();
 
+    SongResponse getSongById(String id);
+
+    List<SongResponse> getAllSong();
+
+    List<SongResponse> getSongsByIds(List<String> ids);
+
     List<SongResponse> getRandomSongs(int qty);
 
     List<SongResponse> getSuggestedMusicByUser(int userId, int qty);

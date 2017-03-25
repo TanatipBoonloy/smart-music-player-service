@@ -38,4 +38,9 @@ public class MusicInformationServiceImp implements MusicInformationService {
     public List<MusicInformation> getRandomMusic(int qty) {
         return musicInformationRepository.getRandomMusic(qty);
     }
+
+    @Override
+    public List<MusicInformation> getMusicsByIds(List<String> ids) {
+        return musicInformationRepository.findByIdIn(ids);
+    }
 }

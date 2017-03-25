@@ -2,7 +2,6 @@ package kmitl.sp.smp.controller;
 
 import kmitl.sp.smp.model.server.response.base.ApiBaseResponse;
 import kmitl.sp.smp.service.ControllerService;
-import kmitl.sp.smp.model.server.response.ArtistResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -10,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.inject.Inject;
-import java.util.List;
+import java.util.Arrays;
 
 /**
  * Created by Jo on 3/24/2017.
@@ -33,6 +32,21 @@ public class Controller {
     @RequestMapping(value = "artists", method = RequestMethod.GET)
     public ApiBaseResponse<?> getAllArtist() {
         return new ApiBaseResponse<>(HttpStatus.OK, controllerService.getAllArtistName());
+    }
+
+    @RequestMapping(value = "song/{songId}", method = RequestMethod.GET)
+    public ApiBaseResponse<?> getSongById(@PathVariable String songId) {
+        return new ApiBaseResponse<>(HttpStatus.OK, controllerService.getSongById(songId));
+    }
+
+    @RequestMapping(value = "songs", method = RequestMethod.GET)
+    public ApiBaseResponse<?> getAllSongs() {
+        return new ApiBaseResponse<>(HttpStatus.OK, controllerService.getAllSong());
+    }
+
+    @RequestMapping(value = "songs/{songIds}", method = RequestMethod.GET)
+    public ApiBaseResponse<?> getSongByIds(@PathVariable String[] songIds) {
+        return new ApiBaseResponse<>(HttpStatus.OK, controllerService.getSongsByIds(Arrays.asList(songIds)));
     }
 
     @RequestMapping(value = "songs/random/{quantity}", method = RequestMethod.GET)

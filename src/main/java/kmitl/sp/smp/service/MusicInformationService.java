@@ -13,4 +13,6 @@ public interface MusicInformationService {
     MusicInformation getMusicById(String id);
 
     List<MusicInformation> getRandomMusic(int qty);
+
+    List<MusicInformation> getMusicsByIds(List<String> ids);
 }

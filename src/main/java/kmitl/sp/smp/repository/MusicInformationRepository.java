@@ -6,6 +6,7 @@ import org.springframework.data.repository.CrudRepository;
 
 import javax.inject.Singleton;
 import javax.transaction.Transactional;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -16,4 +17,6 @@ import java.util.List;
 public interface MusicInformationRepository extends CrudRepository<MusicInformation, String> {
     @Query(value = "SELECT * FROM music_information ORDER BY rand() LIMIT ?1", nativeQuery = true)
     List<MusicInformation> getRandomMusic(int qty);
+
+    List<MusicInformation> findByIdIn(Collection<String> ids);
 }

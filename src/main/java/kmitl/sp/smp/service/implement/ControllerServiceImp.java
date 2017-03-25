@@ -60,4 +60,25 @@ public class ControllerServiceImp implements ControllerService {
                 })
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public SongResponse getSongById(String id) {
+        return ConvertClassUtil.convertMusicInformationToSongResponse(musicInformationService.getMusicById(id));
+    }
+
+    @Override
+    public List<SongResponse> getAllSong() {
+        return musicInformationService.getAllMusic()
+                .stream()
+                .map(ConvertClassUtil::convertMusicInformationToSongResponse)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<SongResponse> getSongsByIds(List<String> ids) {
+        return musicInformationService.getMusicsByIds(ids)
+                .stream()
+                .map(ConvertClassUtil::convertMusicInformationToSongResponse)
+                .collect(Collectors.toList());
+    }
 }
