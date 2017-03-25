@@ -4,6 +4,7 @@ import kmitl.sp.smp.model.server.response.base.ApiBaseResponse;
 import kmitl.sp.smp.service.ControllerService;
 import kmitl.sp.smp.model.server.response.ArtistResponse;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -32,5 +33,10 @@ public class Controller {
     @RequestMapping(value = "artists", method = RequestMethod.GET)
     public ApiBaseResponse<?> getAllArtist() {
         return new ApiBaseResponse<>(HttpStatus.OK, controllerService.getAllArtistName());
+    }
+
+    @RequestMapping(value = "songs/random/{quantity}", method = RequestMethod.GET)
+    public ApiBaseResponse<?> getRandomSong(@PathVariable Integer quantity) {
+        return new ApiBaseResponse<>(HttpStatus.OK, controllerService.getRandomSongs(quantity));
     }
 }

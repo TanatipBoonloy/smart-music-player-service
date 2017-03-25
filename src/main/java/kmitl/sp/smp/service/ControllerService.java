@@ -1,6 +1,7 @@
 package kmitl.sp.smp.service;
 
 import kmitl.sp.smp.model.server.response.ArtistResponse;
+import kmitl.sp.smp.model.server.response.SongResponse;
 
 import java.util.List;
 
@@ -9,4 +10,5 @@ import java.util.List;
  */
 public interface ControllerService {
     List<ArtistResponse> getAllArtistName();
+    List<SongResponse> getRandomSongs(int qty);
 }
