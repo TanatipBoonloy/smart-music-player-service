@@ -2,6 +2,7 @@ package kmitl.sp.smp.service.implement;
 
 import kmitl.sp.smp.entity.MusicInformation;
 import kmitl.sp.smp.model.server.response.ArtistResponse;
+import kmitl.sp.smp.model.server.response.SearchSongsResponse;
 import kmitl.sp.smp.model.server.response.SongResponse;
 import kmitl.sp.smp.service.ArtistService;
 import kmitl.sp.smp.service.ControllerService;
@@ -44,10 +45,8 @@ public class ControllerServiceImp implements ControllerService {
 
     @Override
     public List<SongResponse> getRandomSongs(int qty) {
-        List<MusicInformation> musicInformationList = musicInformationService.getRandomMusic(qty);
-        return musicInformationList.stream()
-                .map(ConvertClassUtil::convertMusicInformationToSongResponse)
-                .collect(Collectors.toList());
+        return ConvertClassUtil.
+                convertMusicInformationListToSongResponseList(musicInformationService.getRandomMusic(qty));
     }
 
     @Override
@@ -68,17 +67,27 @@ public class ControllerServiceImp implements ControllerService {
 
     @Override
     public List<SongResponse> getAllSong() {
-        return musicInformationService.getAllMusic()
-                .stream()
-                .map(ConvertClassUtil::convertMusicInformationToSongResponse)
-                .collect(Collectors.toList());
+        return ConvertClassUtil.
+                convertMusicInformationListToSongResponseList(musicInformationService.getAllMusic());
     }
 
     @Override
     public List<SongResponse> getSongsByIds(List<String> ids) {
-        return musicInformationService.getMusicsByIds(ids)
-                .stream()
-                .map(ConvertClassUtil::convertMusicInformationToSongResponse)
-                .collect(Collectors.toList());
+        return ConvertClassUtil.
+                convertMusicInformationListToSongResponseList(musicInformationService.getMusicsByIds(ids));
+    }
+
+    @Override
+    public SearchSongsResponse searchSongsByKeyword(String keyword) {
+        List<SongResponse> byArtist = ConvertClassUtil.
+                convertMusicInformationListToSongResponseList(musicInformationService.getMusicsByArtistKeyword(keyword));
+
+        List<SongResponse> byName = ConvertClassUtil.
+                convertMusicInformationListToSongResponseList(musicInformationService.getMusicsByNameKeyword(keyword));
+
+        SearchSongsResponse searchSongsResponse = new SearchSongsResponse();
+        searchSongsResponse.setByName(byName);
+        searchSongsResponse.setByArtist(byArtist);
+        return searchSongsResponse;
     }
 }

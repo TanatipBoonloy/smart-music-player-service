@@ -58,4 +58,9 @@ public class Controller {
     public ApiBaseResponse<?> getSuggestedSong(@PathVariable Integer userId, @PathVariable Integer qty) {
         return new ApiBaseResponse<>(HttpStatus.OK, controllerService.getSuggestedMusicByUser(userId, qty));
     }
+
+    @RequestMapping(value = "songs/search/{keyword}", method = RequestMethod.GET)
+    public ApiBaseResponse<?> searchSongsByKeyword(@PathVariable String keyword){
+        return new ApiBaseResponse<>(HttpStatus.OK, controllerService.searchSongsByKeyword(keyword));
+    }
 }
