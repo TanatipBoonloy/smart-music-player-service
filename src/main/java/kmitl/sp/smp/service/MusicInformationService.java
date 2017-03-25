@@ -9,6 +9,7 @@ import java.util.List;
  */
 public interface MusicInformationService {
     List<MusicInformation> getAllMusic();
+
     MusicInformation getMusicById(String id);
 
     List<MusicInformation> getRandomMusic(int qty);

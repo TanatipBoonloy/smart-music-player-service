@@ -10,5 +10,8 @@ import java.util.List;
  */
 public interface ControllerService {
     List<ArtistResponse> getAllArtistName();
+
     List<SongResponse> getRandomSongs(int qty);
+
+    List<SongResponse> getSuggestedMusicByUser(int userId, int qty);
 }

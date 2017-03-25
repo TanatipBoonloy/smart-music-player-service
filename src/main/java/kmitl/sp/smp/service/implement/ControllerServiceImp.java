@@ -6,6 +6,8 @@ import kmitl.sp.smp.model.server.response.SongResponse;
 import kmitl.sp.smp.service.ArtistService;
 import kmitl.sp.smp.service.ControllerService;
 import kmitl.sp.smp.service.MusicInformationService;
+import kmitl.sp.smp.service.SuggestedMusicService;
+import kmitl.sp.smp.util.ConvertClassUtil;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
@@ -19,11 +21,14 @@ import java.util.stream.Collectors;
 public class ControllerServiceImp implements ControllerService {
     private final ArtistService artistService;
     private final MusicInformationService musicInformationService;
+    private final SuggestedMusicService suggestedMusicService;
 
     @Inject
-    public ControllerServiceImp(ArtistService artistService, MusicInformationService musicInformationService) {
+    public ControllerServiceImp(ArtistService artistService, MusicInformationService musicInformationService,
+                                SuggestedMusicService suggestedMusicService) {
         this.artistService = artistService;
         this.musicInformationService = musicInformationService;
+        this.suggestedMusicService = suggestedMusicService;
     }
 
     public List<ArtistResponse> getAllArtistName() {
@@ -41,13 +46,17 @@ public class ControllerServiceImp implements ControllerService {
     public List<SongResponse> getRandomSongs(int qty) {
         List<MusicInformation> musicInformationList = musicInformationService.getRandomMusic(qty);
         return musicInformationList.stream()
-                .map(musicInformation -> {
-                    SongResponse response = new SongResponse();
-                    response.setSongId(musicInformation.getId());
-                    response.setName(musicInformation.getName());
-                    response.setArtist(musicInformation.getArtist());
-                    response.setStreamingUrl(musicInformation.getUrl());
-                    return response;
+                .map(ConvertClassUtil::convertMusicInformationToSongResponse)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<SongResponse> getSuggestedMusicByUser(int userId, int qty) {
+        return suggestedMusicService.getLatestSuggestMusicByUserId(userId, qty)
+                .stream()
+                .map(suggestedMusic -> {
+                    MusicInformation musicInformation = musicInformationService.getMusicById(suggestedMusic.getMusicId());
+                    return ConvertClassUtil.convertMusicInformationToSongResponse(musicInformation);
                 })
                 .collect(Collectors.toList());
     }

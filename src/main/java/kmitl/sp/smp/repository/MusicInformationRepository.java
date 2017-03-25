@@ -14,6 +14,6 @@ import java.util.List;
 @Singleton
 @Transactional
 public interface MusicInformationRepository extends CrudRepository<MusicInformation, String> {
-    @Query(value = "SELECT * FROM music_information ORDER BY rand() LIMIT ?1",nativeQuery = true)
+    @Query(value = "SELECT * FROM music_information ORDER BY rand() LIMIT ?1", nativeQuery = true)
     List<MusicInformation> getRandomMusic(int qty);
 }

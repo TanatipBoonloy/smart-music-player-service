@@ -37,7 +37,7 @@ public class MusicInformation {
     @Column(name = "key")
     private int key;
 
-    @Column(name ="loudness")
+    @Column(name = "loudness")
     private double loudness;
 
     @Column(name = "mode")

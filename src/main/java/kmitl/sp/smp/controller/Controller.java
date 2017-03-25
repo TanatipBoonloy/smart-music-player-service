@@ -39,4 +39,9 @@ public class Controller {
     public ApiBaseResponse<?> getRandomSong(@PathVariable Integer quantity) {
         return new ApiBaseResponse<>(HttpStatus.OK, controllerService.getRandomSongs(quantity));
     }
+
+    @RequestMapping(value = "songs/suggested/{userId}/{qty}", method = RequestMethod.GET)
+    public ApiBaseResponse<?> getSuggestedSong(@PathVariable Integer userId, @PathVariable Integer qty) {
+        return new ApiBaseResponse<>(HttpStatus.OK, controllerService.getSuggestedMusicByUser(userId, qty));
+    }
 }
