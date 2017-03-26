@@ -1,13 +1,11 @@
 package kmitl.sp.smp.service.implement;
 
 import kmitl.sp.smp.entity.MusicInformation;
+import kmitl.sp.smp.model.server.request.LearnDataRequest;
 import kmitl.sp.smp.model.server.response.ArtistResponse;
 import kmitl.sp.smp.model.server.response.SearchSongsResponse;
 import kmitl.sp.smp.model.server.response.SongResponse;
-import kmitl.sp.smp.service.ArtistService;
-import kmitl.sp.smp.service.ControllerService;
-import kmitl.sp.smp.service.MusicInformationService;
-import kmitl.sp.smp.service.SuggestedMusicService;
+import kmitl.sp.smp.service.*;
 import kmitl.sp.smp.util.ConvertClassUtil;
 import org.springframework.stereotype.Service;
 
@@ -23,13 +21,15 @@ public class ControllerServiceImp implements ControllerService {
     private final ArtistService artistService;
     private final MusicInformationService musicInformationService;
     private final SuggestedMusicService suggestedMusicService;
+    private final UserMusicService userMusicService;
 
     @Inject
     public ControllerServiceImp(ArtistService artistService, MusicInformationService musicInformationService,
-                                SuggestedMusicService suggestedMusicService) {
+                                SuggestedMusicService suggestedMusicService, UserMusicService userMusicService) {
         this.artistService = artistService;
         this.musicInformationService = musicInformationService;
         this.suggestedMusicService = suggestedMusicService;
+        this.userMusicService = userMusicService;
     }
 
     public List<ArtistResponse> getAllArtistName() {
@@ -89,5 +89,14 @@ public class ControllerServiceImp implements ControllerService {
         searchSongsResponse.setByName(byName);
         searchSongsResponse.setByArtist(byArtist);
         return searchSongsResponse;
+    }
+
+    @Override
+    public Boolean learnData(Integer userId, LearnDataRequest request) {
+        request.getMusicListenedList()
+                .forEach(musicListened ->
+                        userMusicService.createUserMusic(userId, musicListened.getSongId(), musicListened.getListenTime())
+                );
+        return true;
     }
 }

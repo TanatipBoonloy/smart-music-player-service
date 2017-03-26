@@ -1,12 +1,10 @@
 package kmitl.sp.smp.controller;
 
+import kmitl.sp.smp.model.server.request.LearnDataRequest;
 import kmitl.sp.smp.model.server.response.base.ApiBaseResponse;
 import kmitl.sp.smp.service.ControllerService;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
 import java.util.Arrays;
@@ -60,7 +58,12 @@ public class Controller {
     }
 
     @RequestMapping(value = "songs/search/{keyword}", method = RequestMethod.GET)
-    public ApiBaseResponse<?> searchSongsByKeyword(@PathVariable String keyword){
+    public ApiBaseResponse<?> searchSongsByKeyword(@PathVariable String keyword) {
         return new ApiBaseResponse<>(HttpStatus.OK, controllerService.searchSongsByKeyword(keyword));
+    }
+
+    @RequestMapping(value = "data/learn/{userId}", method = RequestMethod.POST)
+    public ApiBaseResponse<?> learnDate(@PathVariable Integer userId, @RequestBody LearnDataRequest learnDataRequest) {
+        return new ApiBaseResponse<>(HttpStatus.OK, controllerService.learnData(userId, learnDataRequest));
     }
 }

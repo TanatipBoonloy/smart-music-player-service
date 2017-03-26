@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
  * Created by Jo on 3/26/2017.
  */
 public class ConvertClassUtil {
-    public static SongResponse convertMusicInformationToSongResponse(MusicInformation musicInformation){
+    public static SongResponse convertMusicInformationToSongResponse(MusicInformation musicInformation) {
         SongResponse response = new SongResponse();
         response.setSongId(musicInformation.getId());
         response.setName(musicInformation.getName());
@@ -19,7 +19,7 @@ public class ConvertClassUtil {
         return response;
     }
 
-    public static List<SongResponse> convertMusicInformationListToSongResponseList(List<MusicInformation> musicInformationList){
+    public static List<SongResponse> convertMusicInformationListToSongResponseList(List<MusicInformation> musicInformationList) {
         return musicInformationList.stream()
                 .map(ConvertClassUtil::convertMusicInformationToSongResponse)
                 .collect(Collectors.toList());

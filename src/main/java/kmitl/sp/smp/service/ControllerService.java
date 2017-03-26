@@ -1,5 +1,6 @@
 package kmitl.sp.smp.service;
 
+import kmitl.sp.smp.model.server.request.LearnDataRequest;
 import kmitl.sp.smp.model.server.response.ArtistResponse;
 import kmitl.sp.smp.model.server.response.SearchSongsResponse;
 import kmitl.sp.smp.model.server.response.SongResponse;
@@ -23,4 +24,6 @@ public interface ControllerService {
     List<SongResponse> getSuggestedMusicByUser(int userId, int qty);
 
     SearchSongsResponse searchSongsByKeyword(String keyword);
+
+    Boolean learnData(Integer userId, LearnDataRequest request);
 }
