@@ -1,6 +1,7 @@
 package kmitl.sp.smp.controller;
 
 import kmitl.sp.smp.model.server.request.LearnDataRequest;
+import kmitl.sp.smp.model.server.request.LoginWithFacebookRequest;
 import kmitl.sp.smp.model.server.response.base.ApiBaseResponse;
 import kmitl.sp.smp.service.ControllerService;
 import org.springframework.http.HttpStatus;
@@ -54,7 +55,7 @@ public class Controller {
     }
 
     @RequestMapping(value = "songs/suggested/{userId}/{qty}", method = RequestMethod.GET)
-    public ApiBaseResponse<?> getSuggestedSong(@PathVariable Integer userId, @PathVariable Integer qty) {
+    public ApiBaseResponse<?> getSuggestedSong(@PathVariable String userId, @PathVariable Integer qty) {
         return new ApiBaseResponse<>(HttpStatus.OK, controllerService.getSuggestedMusicByUser(userId, qty));
     }
 
@@ -64,7 +65,17 @@ public class Controller {
     }
 
     @RequestMapping(value = "data/learn/{userId}", method = RequestMethod.POST)
-    public ApiBaseResponse<?> learnDate(@PathVariable Integer userId, @RequestBody LearnDataRequest learnDataRequest) {
+    public ApiBaseResponse<?> learnDate(@PathVariable String userId, @RequestBody LearnDataRequest learnDataRequest) {
         return new ApiBaseResponse<>(HttpStatus.OK, controllerService.learnData(userId, learnDataRequest));
+    }
+
+    @RequestMapping(value = "login/new", method = RequestMethod.GET)
+    public ApiBaseResponse<?> getNewUser(){
+        return new ApiBaseResponse<>(HttpStatus.OK, controllerService.getNewUserId());
+    }
+
+    @RequestMapping(value = "login/facebook", method = RequestMethod.POST)
+    public ApiBaseResponse<?> loginWithFacebook(@RequestBody LoginWithFacebookRequest request){
+        return new ApiBaseResponse<>(HttpStatus.OK, controllerService.loginWithFacebook(request));
     }
 }

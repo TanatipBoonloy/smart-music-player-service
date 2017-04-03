@@ -1,7 +1,9 @@
 package kmitl.sp.smp.service;
 
 import kmitl.sp.smp.model.server.request.LearnDataRequest;
+import kmitl.sp.smp.model.server.request.LoginWithFacebookRequest;
 import kmitl.sp.smp.model.server.response.ArtistResponse;
+import kmitl.sp.smp.model.server.response.UserResponse;
 import kmitl.sp.smp.model.server.response.SearchSongsResponse;
 import kmitl.sp.smp.model.server.response.SongResponse;
 
@@ -21,9 +23,13 @@ public interface ControllerService {
 
     List<SongResponse> getRandomSongs(int qty);
 
-    List<SongResponse> getSuggestedMusicByUser(int userId, int qty);
+    List<SongResponse> getSuggestedMusicByUser(String userId, int qty);
 
     SearchSongsResponse searchSongsByKeyword(String keyword);
 
-    Boolean learnData(Integer userId, LearnDataRequest request);
+    Boolean learnData(String userId, LearnDataRequest request);
+
+    UserResponse getNewUserId();
+
+    UserResponse loginWithFacebook(LoginWithFacebookRequest request);
 }

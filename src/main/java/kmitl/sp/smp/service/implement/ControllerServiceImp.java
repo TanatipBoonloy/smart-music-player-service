@@ -3,9 +3,12 @@ package kmitl.sp.smp.service.implement;
 import kmitl.sp.smp.entity.Artist;
 import kmitl.sp.smp.entity.MusicInformation;
 import kmitl.sp.smp.entity.SuggestedMusic;
+import kmitl.sp.smp.entity.User;
 import kmitl.sp.smp.exception.ResourceNotFoundException;
 import kmitl.sp.smp.model.server.request.LearnDataRequest;
+import kmitl.sp.smp.model.server.request.LoginWithFacebookRequest;
 import kmitl.sp.smp.model.server.response.ArtistResponse;
+import kmitl.sp.smp.model.server.response.UserResponse;
 import kmitl.sp.smp.model.server.response.SearchSongsResponse;
 import kmitl.sp.smp.model.server.response.SongResponse;
 import kmitl.sp.smp.service.*;
@@ -14,6 +17,8 @@ import kmitl.sp.smp.util.ThrowExceptionUtil;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -26,14 +31,17 @@ public class ControllerServiceImp implements ControllerService {
     private final MusicInformationService musicInformationService;
     private final SuggestedMusicService suggestedMusicService;
     private final UserMusicService userMusicService;
+    private final UserService userService;
 
     @Inject
     public ControllerServiceImp(ArtistService artistService, MusicInformationService musicInformationService,
-                                SuggestedMusicService suggestedMusicService, UserMusicService userMusicService) {
+                                SuggestedMusicService suggestedMusicService, UserMusicService userMusicService,
+                                UserService userService) {
         this.artistService = artistService;
         this.musicInformationService = musicInformationService;
         this.suggestedMusicService = suggestedMusicService;
         this.userMusicService = userMusicService;
+        this.userService = userService;
     }
 
     public List<ArtistResponse> getAllArtistName() {
@@ -55,8 +63,9 @@ public class ControllerServiceImp implements ControllerService {
     }
 
     @Override
-    public List<SongResponse> getSuggestedMusicByUser(int userId, int qty) {
-        return new ThrowExceptionUtil<>(SuggestedMusic.class).checkIfListIsNull(suggestedMusicService.getLatestSuggestMusicByUserId(userId, qty))
+    public List<SongResponse> getSuggestedMusicByUser(String userId, int qty) {
+        int userFK = getUserFKFromUserId(userId);
+        return new ThrowExceptionUtil<>(SuggestedMusic.class).checkIfListIsNull(suggestedMusicService.getLatestSuggestMusicByUserId(userFK, qty))
                 .stream()
                 .map(suggestedMusic -> {
                     MusicInformation musicInformation = musicInformationService.getMusicById(suggestedMusic.getMusicId());
@@ -105,11 +114,40 @@ public class ControllerServiceImp implements ControllerService {
     }
 
     @Override
-    public Boolean learnData(Integer userId, LearnDataRequest request) {
+    public Boolean learnData(String userId, LearnDataRequest request) {
+        int userFK = getUserFKFromUserId(userId);
         request.getMusicListenedList()
                 .forEach(musicListened ->
-                        userMusicService.createUserMusic(userId, musicListened.getSongId(), musicListened.getListenTime())
+                        userMusicService.createUserMusic(userFK, musicListened.getSongId(), musicListened.getListenTime())
                 );
         return true;
+    }
+
+    @Override
+    public UserResponse getNewUserId() {
+        User user = userService.createNewUser();
+        new ThrowExceptionUtil<>(User.class).checkIfItemIsNull(user);
+        UserResponse userResponse = new UserResponse();
+        userResponse.setUserId(user.getUserId());
+        return userResponse;
+    }
+
+    @Override
+    public UserResponse loginWithFacebook(LoginWithFacebookRequest request) {
+        String facebookId = request.getFacebookId();
+        User user = userService.getUserByFacebookId(facebookId);
+
+        if (user != null) {
+            return ConvertClassUtil.convertUserToUserResponse(user);
+        } else {
+            User newUser = userService.createNewUser(facebookId);
+            return ConvertClassUtil.convertUserToUserResponse(new ThrowExceptionUtil<>(User.class).checkIfItemIsNull(newUser));
+        }
+    }
+
+    private Integer getUserFKFromUserId(String userId) {
+        User user = userService.getUserByUserId(userId);
+        new ThrowExceptionUtil<>(User.class).checkIfItemIsNull(user);
+        return user.getId();
     }
 }
