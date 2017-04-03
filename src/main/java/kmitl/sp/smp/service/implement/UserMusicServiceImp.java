@@ -3,6 +3,7 @@ package kmitl.sp.smp.service.implement;
 import kmitl.sp.smp.entity.UserMusic;
 import kmitl.sp.smp.repository.UserMusicRepository;
 import kmitl.sp.smp.service.UserMusicService;
+import kmitl.sp.smp.util.ThrowExceptionUtil;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
@@ -23,19 +24,32 @@ public class UserMusicServiceImp implements UserMusicService{
     }
     @Override
     public List<UserMusic> getAllUserMusic() {
+        return getAll();
+    }
+
+    @Override
+    public UserMusic createUserMusic(UserMusic userMusic) {
+        UserMusic created = create(userMusic);
+        return new ThrowExceptionUtil<>(UserMusic.class).checkIfItemIsNull(created);
+    }
+
+    @Override
+    public UserMusic createUserMusic(Integer userId, String musicId, Integer listenTime) {
+        UserMusic created = create(userId,musicId,listenTime);
+        return new ThrowExceptionUtil<>(UserMusic.class).checkIfItemIsNull(created);
+    }
+
+    private List<UserMusic> getAll() {
         List<UserMusic> userMusicList = new ArrayList<>();
         userMusicRepository.findAll().forEach(userMusicList::add);
         return userMusicList;
     }
 
-    @Override
-    public UserMusic createUserMusic(UserMusic userMusic) {
+    private UserMusic create(UserMusic userMusic){
         return userMusicRepository.save(userMusic);
     }
 
-    @Override
-    public UserMusic createUserMusic(Integer userId, String musicId, Integer listenTime) {
-
+    private UserMusic create(Integer userId, String musicId, Integer listenTime){
         UserMusic userMusic = new UserMusic();
         userMusic.setUserId(userId);
         userMusic.setMusicId(musicId);

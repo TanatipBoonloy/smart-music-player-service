@@ -22,7 +22,12 @@ public class ArtistServiceImp implements ArtistService {
         this.artistRepository = artistRepository;
     }
 
+    @Override
     public List<Artist> getAllArtist() {
+        return getAll();
+    }
+
+    private List<Artist> getAll() {
         Iterable<Artist> artistIterator = artistRepository.findAll();
         List<Artist> artistNameList = new ArrayList<>();
         artistIterator.forEach(artistNameList::add);

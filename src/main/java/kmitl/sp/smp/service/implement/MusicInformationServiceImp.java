@@ -24,36 +24,60 @@ public class MusicInformationServiceImp implements MusicInformationService {
 
     @Override
     public List<MusicInformation> getAllMusic() {
+        return getAll();
+    }
+
+    @Override
+    public MusicInformation getMusicById(String id) {
+        return getById(id);
+    }
+
+    @Override
+    public List<MusicInformation> getRandomMusic(int qty) {
+        return getRandom(qty);
+    }
+
+    @Override
+    public List<MusicInformation> getMusicsByIds(List<String> ids) {
+        return getListByIds(ids);
+    }
+
+    @Override
+    public List<MusicInformation> getMusicsByNameKeyword(String keyword) {
+        return getByNameKeyword(keyword);
+    }
+
+    @Override
+    public List<MusicInformation> getMusicsByArtistKeyword(String keyword) {
+        return getByArtistKeyword(keyword);
+    }
+
+    private List<MusicInformation> getAll() {
         List<MusicInformation> musicInformationList = new ArrayList<>();
         musicInformationRepository.findAll()
                 .forEach(musicInformationList::add);
         return musicInformationList;
     }
 
-    @Override
-    public MusicInformation getMusicById(String id) {
+    private MusicInformation getById(String id) {
         return musicInformationRepository.findOne(id);
     }
 
-    @Override
-    public List<MusicInformation> getRandomMusic(int qty) {
+    private List<MusicInformation> getRandom(int qty) {
         return musicInformationRepository.getRandomMusic(qty);
     }
 
-    @Override
-    public List<MusicInformation> getMusicsByIds(List<String> ids) {
+    private List<MusicInformation> getListByIds(List<String> ids) {
         return musicInformationRepository.findByIdIn(ids);
     }
 
-    @Override
-    public List<MusicInformation> getMusicsByArtistKeyword(String keyword) {
-        BiFunction<String, String, List<MusicInformation>> biFunction = musicInformationRepository::getMusicsByArtistKeyword;
+    private List<MusicInformation> getByNameKeyword(String keyword) {
+        BiFunction<String, String, List<MusicInformation>> biFunction = musicInformationRepository::getMusicsByNameKeyword;
         return searchByKeyword(biFunction, keyword);
     }
 
-    @Override
-    public List<MusicInformation> getMusicsByNameKeyword(String keyword) {
-        BiFunction<String, String, List<MusicInformation>> biFunction = musicInformationRepository::getMusicsByNameKeyword;
+    private List<MusicInformation> getByArtistKeyword(String keyword) {
+        BiFunction<String, String, List<MusicInformation>> biFunction = musicInformationRepository::getMusicsByArtistKeyword;
         return searchByKeyword(biFunction, keyword);
     }
 

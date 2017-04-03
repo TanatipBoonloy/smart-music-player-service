@@ -22,6 +22,10 @@ public class SuggestedMusicServiceImp implements SuggestedMusicService {
 
     @Override
     public List<SuggestedMusic> getLatestSuggestMusicByUserId(int userId, int qty) {
+        return getLatestByUserId(userId, qty);
+    }
+
+    private List<SuggestedMusic> getLatestByUserId(int userId, int qty) {
         return suggestedMusicRepository.getLatestSuggestedMusic(userId, qty);
     }
 }
