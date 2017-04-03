@@ -12,6 +12,7 @@ import java.util.Arrays;
 /**
  * Created by Jo on 3/24/2017.
  */
+@CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping(value = "api/v1/smp")
 public class Controller {
