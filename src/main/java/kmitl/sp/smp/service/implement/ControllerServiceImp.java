@@ -1,5 +1,6 @@
 package kmitl.sp.smp.service.implement;
 
+import kmitl.sp.smp.clients.SmpAiApi;
 import kmitl.sp.smp.entity.Artist;
 import kmitl.sp.smp.entity.MusicInformation;
 import kmitl.sp.smp.entity.SuggestedMusic;
@@ -32,16 +33,18 @@ public class ControllerServiceImp implements ControllerService {
     private final SuggestedMusicService suggestedMusicService;
     private final UserMusicService userMusicService;
     private final UserService userService;
+    private final SmpAiApi smpAiApi;
 
     @Inject
     public ControllerServiceImp(ArtistService artistService, MusicInformationService musicInformationService,
                                 SuggestedMusicService suggestedMusicService, UserMusicService userMusicService,
-                                UserService userService) {
+                                UserService userService, SmpAiApi smpAiApi) {
         this.artistService = artistService;
         this.musicInformationService = musicInformationService;
         this.suggestedMusicService = suggestedMusicService;
         this.userMusicService = userMusicService;
         this.userService = userService;
+        this.smpAiApi = smpAiApi;
     }
 
     public List<ArtistResponse> getAllArtistName() {
@@ -120,6 +123,7 @@ public class ControllerServiceImp implements ControllerService {
                 .forEach(musicListened ->
                         userMusicService.createUserMusic(userFK, musicListened.getSongId(), musicListened.getListenTime())
                 );
+        smpAiApi.updateSuggestedSongs(userId);
         return true;
     }
 
