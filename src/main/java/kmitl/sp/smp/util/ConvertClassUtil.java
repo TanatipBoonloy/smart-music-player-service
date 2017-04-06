@@ -17,6 +17,7 @@ public class ConvertClassUtil {
         response.setSongId(musicInformation.getId());
         response.setName(musicInformation.getName());
         response.setArtist(musicInformation.getArtist());
+        response.setDuration(musicInformation.getDurationMs());
         response.setStreamingUrl(musicInformation.getUrl());
         return response;
     }

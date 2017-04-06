@@ -17,6 +17,9 @@ public class SongResponse {
     @JsonProperty("artist")
     private String artist;
 
+    @JsonProperty("duration")
+    private Integer duration;
+
     @JsonProperty("streaming_url")
     private String streamingUrl;
 
